@@ -1,7 +1,5 @@
 # Refinery Supply Chain & Maritime Logistics Dashboard
 
-[![Interactive Dashboard](https://img.shields.io/badge/Power%20BI-Live%20Dashboard-yellow?style=for-the-badge&logo=powerbi)](YOUR_NOVYPRO_OR_PUBLISH_WEB_LINK_HERE)
-
 An economic decision-support dashboard designed to track downstream refinery logistics and market economics. This project automates the extraction of market spot prices and logistics data via Python, models refinery gross margins using DAX, and visualizes dynamic route-profitability metrics across global destination markets.
 
 ## 📊 Dashboard Architecture
