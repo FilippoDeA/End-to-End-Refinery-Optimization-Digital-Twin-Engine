@@ -4,7 +4,7 @@ An economic decision-support dashboard designed to track downstream refinery log
 
 ## 📊 Dashboard Architecture
 *(Click the image below to view the full PDF export)*
-[![Refinery Supply Chain Dashboard](assets/dashboard_preview.png)](assets/Dashboard_Export.pdf)
+[![Refinery Supply Chain Dashboard](assets/dashboard_preview.png)](assets/dashboard_Export.pdf)
 
 The dashboard provides real-time visibility into netback margins and supply chain economics:
 * **Dynamic Cost Allocation:** Recalculates optimized fuel recipe costs dynamically when filtering by global destination.
