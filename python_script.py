@@ -85,8 +85,12 @@ def run_blending_optimizer(prices, ron_specs, rvp_idx, inventories, batch_size, 
 # =====================================================================
 destinations_list = ['PADD1_NY', 'ARA_Rotterdam', 'Mexico_Tuxpan', 'Brazil_Santos', 'WAF_Lagos', 'Singapore', 'AG_Fujairah']
 components = ['Straight-run Naphtha', 'Reformate', 'Alkylate', 'Butane']
+batch_size = 100000.0
+inventories = [80000.0, 40000.0, 70000.0, 20000.0]
 
-master_rows = []
+fact_commercial_trades = []
+fact_refinery_tanks = []
+
 
 for index, row in prices_df.iterrows():
     date_obj = row['Date']
@@ -128,28 +132,39 @@ for index, row in prices_df.iterrows():
             dynamic_spot_prices, 
             ron_specs, 
             rvp_indices, 
-            [80000, 40000, 50000, 15000], 
-            100000, 
+            inventories,
+            batch_size,
             target_ron=87.0, 
             target_rvp_max=target_rvp_max
         )
 
         # Clean continuous multi-year destination price waves using index
         market_price = round(cfg['base'] + (math.sin((index * cfg['wave_speed']) / 58.0 + cfg['offset']) * cfg['volatility']), 2)
-        
-        for comp, frac in zip(components, optimal_mix['volumes']):
-            master_rows.append([
-                date_str, 
-                dest, 
-                market_price, 
-                cfg['freight'], 
-                comp, 
-                frac, 
-                optimal_mix['cost_per_barrel'],
-                target_rvp_max
+        # 1. Populate Trades Fact Table (1 row per Date/Dest)
+        fact_commercial_trades.append([
+            date_str, dest, market_price, cfg['freight'], optimal_mix['cost_per_barrel'], target_rvp_max
+        ])
+
+        # 2. Populate Tanks Fact Table (4 rows per Date/Dest)
+        for comp, frac, cap, comp_price in zip(components, optimal_mix['volumes'], inventories, dynamic_spot_prices):
+            used_bbl = frac * batch_size
+            utilization_pct = round(used_bbl / cap, 4)
+            is_constrained = 1 if utilization_pct >= 0.99 else 0
+            
+            fact_refinery_tanks.append([
+                date_str, dest, comp, comp_price, used_bbl, cap, frac, utilization_pct, is_constrained
             ])
 
-df_master_model = pd.DataFrame(
-    master_rows, 
-    columns=['Date', 'Destination', 'Market_Spot_Price_bbl', 'Freight_Cost_bbl', 'Component', 'Volume_Fraction', 'Optimized_Blend_Cost_bbl', 'RVP_Limit']
+df_fact_trades = pd.DataFrame(
+    fact_commercial_trades, 
+    columns=['Date', 'Destination', 'Market_Spot_Price_bbl', 'Freight_Cost_bbl', 'Optimized_Blend_Cost_bbl', 'Target_RVP_Limit']
 )
+
+df_fact_tanks = pd.DataFrame(
+    fact_refinery_tanks, 
+    columns=['Date', 'Destination', 'Component', 'Component_Spot_Price_bbl', 'Used_Volume_bbl', 'Tank_Capacity_bbl', 'Volume_Fraction', 'Capacity_Utilization_Pct', 'Is_Bottleneck']
+)
+
+# Optional: Export to CSV for Power BI Import
+# df_fact_trades.to_csv('fact_commercial_trades.csv', index=False)
+# df_fact_tanks.to_csv('fact_refinery_tanks.csv', index=False)
