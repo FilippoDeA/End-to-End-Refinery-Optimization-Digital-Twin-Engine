@@ -8,7 +8,7 @@ from scipy.optimize import linprog
 # SECTION 1: DWSIM INITIALIZATION & PROPERTY EXTRACTION
 # =====================================================================
 print("1. Initializing DWSIM Headless Engine...")
-dwsim_path = r"C:\Users\filip\AppData\Local\DWSIM"
+dwsim_path = r"C:\Users\...\AppData\Local\DWSIM"
 sys.path.append(dwsim_path)
 
 clr.AddReference("DWSIM.Automation")
