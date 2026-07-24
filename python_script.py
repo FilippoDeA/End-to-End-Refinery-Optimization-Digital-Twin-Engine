@@ -15,7 +15,7 @@ clr.AddReference("DWSIM.Automation")
 from DWSIM.Automation import Automation3
 
 interf = Automation3()
-flowsheet_path = r"C:\Users\filip\OneDrive\Desktop\Refinery_Optimizer_Project\Blending_Model.dwxmz"
+flowsheet_path = r"C:\Users\...\Blending_Model.dwxmz"
 flowsheet = interf.LoadFlowsheet(flowsheet_path)
 
 print("2. Flowsheet loaded. Simulating stream properties...")
@@ -56,7 +56,7 @@ ron_specs = [
 # =====================================================================
 # SECTION 2: READ DAILY TIME-SERIES PRICES
 # =====================================================================
-prices_df = pd.read_csv(r"C:\Users\filip\OneDrive\Desktop\Refinery_Optimizer_Project\live_prices.csv")
+prices_df = pd.read_csv(r"C:\Users\...\live_prices.csv")
 prices_df['Date'] = pd.to_datetime(prices_df['Date'])
 
 # =====================================================================
