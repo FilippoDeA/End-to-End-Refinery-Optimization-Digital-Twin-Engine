@@ -9,7 +9,7 @@ By interfacing a headless DWSIM chemical process simulation with a SciPy Linear 
 ## 📊 Live Dashboard Demonstration
 *(Watch the dynamic cost allocation, tank bottleneck tracking, and risk heatmapping in action below)*
 
-![Dashboard Demonstration](assets/dashboard_gif.gif)
+![Dashboard Demonstration]()
 
 📄 **[Click here to view or download the high-resolution PDF export](assets/dashboard_Export.pdf)**
 
